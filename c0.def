@@ -1,0 +1,42 @@
+page: c0, basic_frame
+    module: c
+    
+    $nest tryeach, s, e, n, d, m, o, r, y
+        $if send+more==money
+            $print $send + $more = $money
+            return 0
+
+subcode: tryeach(s)
+    $local int $(s), int l_$(s)[10]
+    $for $(s)=0:10
+        $(if:s in s,m)
+            $if $(s)==0
+                continue
+
+        $(if:prev)
+            $if $(prev)[$(s)]
+                continue
+        $for i_$(s)=0:10
+            $(if:prev)
+                l_$(s)[i_$(s)] = $(prev)[i_$(s)]
+            $(else)
+                l_$(s)[i_$(s)] = 0
+        l_$(s)[$(s)] = 1
+        $(set:prev=l_$(s))
+
+        $(if:s=d)
+            $call to_number, send, s, e, n, d
+        $(elif:s=r)
+            $call to_number, more, m, o, r, e
+        $(elif:s=y)
+            $call to_number, money, m, o, n, e, y
+        BLOCK
+
+subcode: to_number(dest, @plist)
+    $local int $(dest)
+    $(for:p in $(plist))
+        $(if:_i=0)
+            $(dest)=$(p)
+        $(else)
+            $(dest)=$(dest)*10+$(p)
+

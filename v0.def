@@ -1,0 +1,20 @@
+include: perl/permutation.def
+page: v0
+    module: perl
+
+    &call permute, 10, 8
+        my ($s, $e, $n, $d, $m, $o, $r, $y) = @perm
+        $if $s!=0 and $m!=0
+            my $send = to_number($s,$e,$n,$d)
+            my $more = to_number($m, $o, $r, $e)
+            my $money= to_number($m, $o, $n, $e, $y)
+            $if $send+$more==$money
+                $print $send + $more = $money
+                exit
+
+fncode: to_number
+    my $t=0
+    $foreach $a in @_
+        $t=$t*10+$a
+    return $t
+

@@ -1,0 +1,39 @@
+page: v2
+    module: perl
+
+    my @digits
+
+    $(set:prev=digits)
+    $nest tryeach, s, e, n, d, m, o, r, y
+        $if $send+$more==$money
+            $print $send + $more = $money
+            exit
+
+
+subcode: tryeach(s)
+    $(set:range=0..9)
+    $(if:s in s,m)
+        $(set:range=1..9)
+
+    $foreach $$(s) in $(range)
+        $if !$$(prev)[$$(s)]
+            my @l_$(s) = @$(prev)
+            $l_$(s)[$$(s)] = 1
+            $(set:prev=l_$(s))
+
+            $(if:s=d)
+                my $send = to_number($s, $e, $n, $d)
+            $(elif:s=r)
+                my $more = to_number($m, $o, $r, $e)
+            $(elif:s=y)
+                my $money = to_number($m, $o, $n, $e, $y)
+            BLOCK
+
+
+fncode: to_number
+    my $t=0
+    $foreach $a in @_
+        $t=$t*10+$a
+    return $t
+
+
